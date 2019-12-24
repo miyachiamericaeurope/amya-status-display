@@ -53,9 +53,9 @@ def makeImage():
     d.text((8,183), "Hostname: {}".format(hostname), fill=fill, font=font)
     d.text((100,14), "{}".format(dt), fill=fill, font=bigfont)
     d.text((100,50), "{}".format(dtime), fill=fill, font=bigfont)
-    cmd = 'rm ./pil*'
-    args = shlex.split(cmd)
-    p = subprocess.Popen(args, stdout=subprocess.DEVNULL)
+    #cmd = 'rm ./pil*'
+    #args = shlex.split(cmd)
+    #p = subprocess.Popen(args, stdout=subprocess.DEVNULL)
     img.save('pil_text.png')
     # cmd = 'mv pil_text.temp.png pil_text.png'
     # args = shlex.split(cmd)  
@@ -81,7 +81,7 @@ def main():
            
     while True:
        makeImage()
-       sleep(1.1414)
+       sleep(3)
        testRes = testActive()
        if not testRes:
           # print("test output Failed: {}".format(testRes))
