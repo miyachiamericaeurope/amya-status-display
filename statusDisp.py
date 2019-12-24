@@ -70,6 +70,12 @@ def testActive():
     return 'noverbose' in resp
 
 def main():
+    # kill any lingering running fbi processes
+    cmd = 'killall fbi'
+    args = shlex.split(cmd)
+    sppid = subprocess.run(args)
+
+    # start a new fbi process
     cmd = 'fbi -d /dev/fb0 -noverbose -nocomments -T 1 -t 2 -cachemem 0 pil_text.png image1.png image2.png'
     args = shlex.split(cmd)
     p = subprocess.Popen(args, stdout=subprocess.PIPE)
@@ -81,7 +87,7 @@ def main():
            
     while True:
        makeImage()
-       sleep(3)
+       sleep(5)
        testRes = testActive()
        if not testRes:
           # print("test output Failed: {}".format(testRes))
