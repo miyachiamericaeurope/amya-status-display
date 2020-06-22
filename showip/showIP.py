@@ -55,9 +55,19 @@ class ShowIP:
      hnText = pstr
      return hnText
 
+   # FOR HARDWARE DEBUG
+   def getCPUTemp(self):
+      p = sp.run("cat /sys/class/thermal/thermal_zone0/temp", shell=True, stdout=PIPE, stderr=PIPE, text=True)
+      temp = round((float(p.stdout)/1000), 2)
+      tempText = str(temp) + " 'C"
+      return tempText
+
 
 if __name__ == "__main__":
    sip = ShowIP()
    res = sip.getIPText()
    host = sip.getHostname()
-   print("IP: {}, host: {}".format(res,host))
+   temp = sip.getCPUTemp()
+   print("IP: {}, host: {}, CPUTemp: {}".format(res, host, temp))
+
+

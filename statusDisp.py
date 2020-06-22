@@ -25,7 +25,8 @@ def _gatherInfo():
     sip = ShowIP()
     hostname = sip.getHostname()
     connected, net, host, mac = sip.getIPText()
-    return connected, net, host, mac, hostname
+    cputemp = sip.getCPUTemp()
+    return connected, net, host, mac, hostname, cputemp
 
 def _getTime():
     now = datetime.now()
@@ -34,7 +35,7 @@ def _getTime():
     return (ascnow, asctime)
 
 def _makeImage():
-    connected, net, host, mac, hostname = _gatherInfo()
+    connected, net, host, mac, hostname, cputemp = _gatherInfo()
     dt, dtime = _getTime()
 
     font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -53,6 +54,7 @@ def _makeImage():
     d.text((8,131), "IP: {}".format(host), fill=fill, font=font)
     d.text((8,157), "MAC: {}".format(mac), fill=fill, font=font)
     d.text((8,183), "Hostname: {}".format(hostname), fill=fill, font=font)
+    d.text((8,209), " CPUTemp: {}".format(cputemp), fill=fill, font=font)
     d.text((100,14), "{}".format(dt), fill=fill, font=bigfont)
     d.text((100,50), "{}".format(dtime), fill=fill, font=bigfont)
 #    cmd = 'rm ./pil*'
@@ -64,7 +66,7 @@ def _makeImage():
     # p = subprocess.Popen(args, stdout=subprocess.DEVNULL)
 
 def makeImage():
-    connected, net, host, mac, hostname = _gatherInfo()
+    connected, net, host, mac, hostname, cputemp = _gatherInfo()
     dt, dtime = _getTime()
 
     canvasW, canvasH =(320, 240)
@@ -100,6 +102,7 @@ def makeImage():
     textOverlay.text((8,131), "      IP: {}".format(host), fill=fill, font=font)
     textOverlay.text((8,157), "     MAC: {}".format(mac), fill=fill, font=font)
     textOverlay.text((8,183), "Hostname: {}".format(hostname), fill=fill, font=font)
+    textOverlay.text((8,209), " CPUTemp: {}".format(cputemp), fill=fill, font=font)
     textOverlay.text((14,70), "{}".format(dt), fill=fill, font=font)
     textOverlay.text((164,70), "{}".format(dtime), fill=fill, font=font)
     bg.show()
