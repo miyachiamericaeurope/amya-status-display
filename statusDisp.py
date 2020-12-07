@@ -8,6 +8,7 @@ from time import sleep
 from datetime import datetime
 import hashlib
 import re
+from led import Led
 
 def _procCmds(cmds):
     p = [0 for c in cmds]
@@ -132,7 +133,12 @@ def makeImage():
     bg.save("pil_text.png")
 		
 		
+# led setup
+led = Led()
+led.set_output(False)
+
 def makeImage_2():
+    global led
 
     canvasW, canvasH =(320, 240)
     
@@ -190,24 +196,31 @@ def makeImage_2():
     if not goingUporDown and not connected or (connected and isLocalLink): 
         screenColor = red
         fill = redTextFill
+        led.set_output(index=0, state=False)
     elif not goingUporDown and connected and not isLocalLink and not isConfigured :
         screenColor = orange
         fill = orangeTextFill
+        led.set_output(index=0, state=False)
     elif not goingUporDown and connected and not isLocalLink and isConfigured and not canReachServer:
         screenColor = yellow
         fill = yellowTextFill
+        led.set_output(index=0, state=False)
     elif not goingUporDown and connected and not isLocalLink and isConfigured and canReachServer and activity:
         screenColor = green
         fill = greenTextFill
+        led.set_output(index=0, state=True)
     elif not goingUporDown and connected and not isLocalLink and isConfigured and canReachServer and not activity:
         screenColor = blue
         fill = blueTextFill
+        led.set_output(index=0, state=False)
     elif goingUporDown:
         screenColor = black
         fill = blackTextFill
+        led.set_output(index=0, state=False)
     else:
         screenColor = black
         fill = blackTextFill
+        led.set_output(index=0, state=False)
        
     bg = Image.new('RGB', (canvasW, canvasH), screenColor)
     
