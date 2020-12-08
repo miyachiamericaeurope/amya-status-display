@@ -9,6 +9,7 @@ from datetime import datetime
 import hashlib
 import re
 from led import Led
+import time
 
 def _procCmds(cmds):
     p = [0 for c in cmds]
@@ -137,6 +138,7 @@ def makeImage():
 led = Led()
 led.set_output(False)
 
+SERIAL_IDLE_TIME = 60  # sec
 def makeImage_2():
     global led
 
@@ -179,9 +181,15 @@ def makeImage_2():
     canReachServer = serviceStatus["amya-publish-pickled.service"]
     isLocalLink = _isLocalLink(host) 
     goingUporDown = False # don't know how to detect this yet.
-    activity = True # don't know how to detect this yet.
 
-    
+    activity = False
+    try:
+        lastSerialPortActivity = os.stat('/storage/pickleTracker')
+    except:
+        lastSerialPortActivity = time.time() - SERIAL_IDLE_TIME - 1
+    if (time.time() - lastSerialPortActivity.st_mtime) < SERIAL_IDLE_TIME:
+        activity = True
+
    # '- Operational display
    # '- Add badge that flashes when a serial string is RCVD from RW unit but failed publication; use a second badge type if also successful publication to the broker
    # '- Change background colors:
@@ -212,7 +220,7 @@ def makeImage_2():
     elif not goingUporDown and connected and not isLocalLink and isConfigured and canReachServer and not activity:
         screenColor = blue
         fill = blueTextFill
-        led.set_output(index=0, state=False)
+        led.set_output(index=0, state=True)
     elif goingUporDown:
         screenColor = black
         fill = blackTextFill
