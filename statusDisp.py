@@ -185,9 +185,10 @@ def makeImage_2():
     activity = False
     try:
         lastSerialPortActivity = os.stat('/storage/pickleTracker')
+        lastSerialPortActivity = lastSerialPortActivity.st_mtime
     except:
         lastSerialPortActivity = time.time() - SERIAL_IDLE_TIME - 1
-    if (time.time() - lastSerialPortActivity.st_mtime) < SERIAL_IDLE_TIME:
+    if (time.time() - lastSerialPortActivity) < SERIAL_IDLE_TIME:
         activity = True
 
    # '- Operational display
