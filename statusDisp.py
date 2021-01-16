@@ -10,6 +10,22 @@ import hashlib
 import re
 from led import Led
 import time
+from pythonping import ping
+import threading
+from jsonconfig import JsonConfig
+
+canReachServer = False
+#host = JsonConfig('/opt/amya/configs/pickled.config.json').get('mqtt', 'connection','host', None)
+config = JsonConfig('/opt/amya/configs/pickled.config.json')
+host = config.get('mqtt','connection','host')
+def ping_server():
+    global canReachServer
+    try:
+        canReachServer = ping(host, count=1).success()
+    except:
+        pass
+    print(f"can reach server: {canReachServer}")
+    threading.Timer(10, ping_server).start()
 
 def _procCmds(cmds):
     p = [0 for c in cmds]
@@ -178,7 +194,8 @@ def makeImage_2():
     
     serviceStatus = _gatherServiceInfo()
     isConfigured = os.path.isfile('/storage/opt/easy-rsa/easyrsa3/pki/ca.crt')
-    canReachServer = serviceStatus["amya-publish-pickled.service"]
+    global canReachServer
+    # canReachServer = serviceStatus["amya-publish-pickled.service"]
     isLocalLink = _isLocalLink(host) 
     goingUporDown = False # don't know how to detect this yet.
 
@@ -230,6 +247,7 @@ def makeImage_2():
         screenColor = black
         fill = blackTextFill
         led.set_output(index=0, state=False)
+
        
     bg = Image.new('RGB', (canvasW, canvasH), screenColor)
     
@@ -270,6 +288,9 @@ def main():
     killFbiCmd = 'pkill fbi'
     getFbiPid = 'pgrep fbi'
     killPid = 'kill {}'
+
+    # kick off ping server thread
+    ping_server()
 
     # internal function to execute cli commands
     def execute_cmd(cmd):
