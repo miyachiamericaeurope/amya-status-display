@@ -16,7 +16,7 @@ from jsonconfig import JsonConfig
 
 canReachServer = False
 #host = JsonConfig('/opt/amya/configs/pickled.config.json').get('mqtt', 'connection','host', None)
-config = JsonConfig('/opt/amya/configs/pickled.config.json')
+config = JsonConfig('/storage/configs/pickled.config.json')
 host = config.get('mqtt','connection','host')
 def ping_server():
     global canReachServer
@@ -24,7 +24,7 @@ def ping_server():
         canReachServer = ping(host, count=1).success()
     except:
         pass
-    print(f"can reach server: {canReachServer}")
+    logger.debug(f"can reach server: {canReachServer}")
     threading.Timer(10, ping_server).start()
 
 def _procCmds(cmds):
