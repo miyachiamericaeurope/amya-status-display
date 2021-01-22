@@ -15,11 +15,10 @@ import threading
 from jsonconfig import JsonConfig
 
 canReachServer = False
-#host = JsonConfig('/opt/amya/configs/pickled.config.json').get('mqtt', 'connection','host', None)
-config = JsonConfig('/storage/configs/pickled.config.json')
-host = config.get('mqtt','connection','host')
 def ping_server():
     global canReachServer
+    config = JsonConfig('/storage/configs/pickled.config.json')
+    host = config.get('mqtt','connection','host')
     try:
         canReachServer = ping(host, count=1).success()
     except:
