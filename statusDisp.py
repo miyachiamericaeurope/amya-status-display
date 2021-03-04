@@ -17,7 +17,7 @@ from jsonconfig import JsonConfig
 canReachServer = False
 def ping_server():
     global canReachServer
-    config = JsonConfig('/storage/configs/pickled.config.json')
+    config = JsonConfig('/opt/configs/pickled.config.json')
     host = config.get('mqtt','connection','host')
     try:
         canReachServer = ping(host, count=1).success()
